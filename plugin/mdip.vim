@@ -7,12 +7,16 @@ function! s:IsWSL()
     return 0
 endfunction
 
-function! s:SafeMakeDir()
+function! s:SafeMakeDir(path_type)
     if !exists('g:mdip_imgdir_absolute')
+        let imgdir = g:mdip_imgdir
+        if path_type == 'd'
+           let imgdir = expand('%:r') 
+        endif
         if s:os == "Windows"
-            let outdir = expand('%:p:h') . '\' . g:mdip_imgdir
+            let outdir = expand('%:p:h') . '\' . imgdir
     else
-            let outdir = expand('%:p:h') . '/' . g:mdip_imgdir
+            let outdir = expand('%:p:h') . '/' . imgdir
         endif
     else
 	let outdir = g:mdip_imgdir
@@ -194,12 +198,12 @@ function! g:LatexPasteImage(relpath)
 endfunction
 
 function! g:EmptyPasteImage(relpath)
-    execute "normal! i" . a:relpath 
+    execute "normal! i" . a:relpath
 endfunction
 
 let g:PasteImageFunction = 'g:MarkdownPasteImage'
 
-function! mdip#MarkdownClipboardImage()
+function! mdip#MarkdownClipboardImage(path_type)
     " detect os: https://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
     let s:os = "Windows"
     if !(has("win64") || has("win32") || has("win16"))
@@ -208,7 +212,7 @@ function! mdip#MarkdownClipboardImage()
 
     " add check whether file with the name exists
     while  1
-        let workdir = s:SafeMakeDir()
+        let workdir = s:SafeMakeDir(path_type)
         " change temp-file-name and image-name
         let g:mdip_tmpname = s:InputName()
         if empty(g:mdip_tmpname)
