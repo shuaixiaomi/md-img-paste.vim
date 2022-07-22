@@ -9,15 +9,15 @@ endfunction
 
 function! s:SafeMakeDir(path_type)
     if !exists('g:mdip_imgdir_absolute')
+        let mdip_imgdir = g:mdip_imgdir
         if a:path_type == "d"
-          let g:mdip_imgdir = expand('%:t:r')
-          let g:mdip_imgdir_intext = g:mdip_imgdir
+          let mdip_imgdir = expand('%:t:r')
         endif
         if s:os == "Windows"
-            let outdir = expand('%:p:h') . '\' . g:mdip_imgdir
+            let outdir = expand('%:p:h') . '\' . mdip_imgdir
 
     else
-            let outdir = expand('%:p:h') . '/' . g:mdip_imgdir
+            let outdir = expand('%:p:h') . '/' . mdip_imgdir
         endif
     else
 	let outdir = g:mdip_imgdir
@@ -233,7 +233,10 @@ function! mdip#MarkdownClipboardImage(path_type)
     else
         " let relpath = s:SaveNewFile(g:mdip_imgdir, tmpfile)
         let extension = split(tmpfile, '\.')[-1]
-        let relpath = g:mdip_imgdir_intext . '/' . g:mdip_tmpname . '.' . extension
+        let mdip_imgdir_intext = g:mdip_imgdir_intext
+        if a:path_type == "d" 
+            let mdip_imgdir_intext = expand('%:t:r')
+        let relpath = mdip_imgdir_intext . '/' . g:mdip_tmpname . '.' . extension
         if call(get(g:, 'PasteImageFunction'), [relpath])
             return
         endif
