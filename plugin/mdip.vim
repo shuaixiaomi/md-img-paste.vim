@@ -11,6 +11,7 @@ function! s:SafeMakeDir(path_type)
     if !exists('g:mdip_imgdir_absolute')
         if a:path_type == "d"
           let g:mdip_imgdir = expand('%:t:r')
+          let g:mdip_imgdir_intext = g:mdip_imgdir
         endif
         if s:os == "Windows"
             let outdir = expand('%:p:h') . '\' . g:mdip_imgdir
