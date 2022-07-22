@@ -10,7 +10,7 @@ endfunction
 function! s:SafeMakeDir(path_type)
     if !exists('g:mdip_imgdir_absolute')
         let imgdir = g:mdip_imgdir
-        if a:path_type == 'd'
+        if a:path_type == "d"
            let imgdir = expand('%:r')
         endif
         if s:os == "Windows"
@@ -212,7 +212,7 @@ function! mdip#MarkdownClipboardImage(path_type)
 
     " add check whether file with the name exists
     while  1
-        let workdir = s:SafeMakeDir(path_type)
+        let workdir = s:SafeMakeDir(a:path_type)
         " change temp-file-name and image-name
         let g:mdip_tmpname = s:InputName()
         if empty(g:mdip_tmpname)
